@@ -1,0 +1,3072 @@
+https://github.com/mayankbansal93/lld-food-delivery-zomato-swiggy
+
+1. GRID UNIQUE PATH
+
+// RECURSION
+class Solution {
+    public int uniquePaths(int m, int n) {
+        return f(m-1, n-1);
+    }
+    
+    public int f(int i, int j){
+        if(i == 0 && j == 0) return 1;
+        if(i < 0 || j < 0) return 0;
+        int up = f(i-1, j);
+        int left = f(i, j-1);
+        
+        return up + left;
+    }
+}
+
+// MEMOIZATION
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        for(int[] dps : dp){
+            Arrays.fill(dps, -1);
+        }
+        return f(m-1, n-1, dp);
+    }
+    
+    public int f(int i, int j, int[][] dp){
+        if(i == 0 && j == 0) return 1;
+        if(i < 0 || j < 0) return 0;
+        if(dp[i][j] != -1) return dp[i][j];
+        int up = f(i-1, j, dp);
+        int left = f(i, j-1, dp);
+        dp[i][j] = up + left;
+        return dp[i][j];
+    }
+}
+
+// TABULATION
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(i ==0 && j == 0) dp[i][j] = 1;
+                else {
+                    int up = 0;
+                    int left = 0;
+                    if(i > 0) up = dp[i-1][j];
+                    if(j > 0) left = dp[i][j-1];
+                    dp[i][j] = up + left;
+                }
+            }
+        }
+        return dp[m-1][n-1];
+    }   
+}
+
+2. GRID UNIQUE PATH 2
+
+//RECURSION
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        return f(m-1, n-1, obstacleGrid);
+    }
+    public int f(int i, int j, int[][] obstacleGrid){
+        if(i >= 0 && j >= 0 && obstacleGrid[i][j] == 1) return 0;
+        if(i == 0 && j == 0) return 1;
+        if(i < 0 || j < 0) return 0;
+        int up = f(i-1, j, obstacleGrid);
+        int left = f(i, j-1, obstacleGrid);
+        
+        return up + left;
+    }
+}
+
+//MEMOIZATION
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        for(int[] dps : dp){
+            Arrays.fill(dps, -1);
+        }
+        return f(m-1, n-1, obstacleGrid, dp);
+    }
+    public int f(int i, int j, int[][] obstacleGrid, int[][] dp){
+        if(i >= 0 && j >= 0 && obstacleGrid[i][j] == 1) return 0;
+        if(i == 0 && j == 0) return 1;
+        if(i < 0 || j < 0) return 0;
+         if(dp[i][j] != -1) return dp[i][j];
+        int up = f(i-1, j, obstacleGrid, dp);
+        int left = f(i, j-1, obstacleGrid, dp);     
+        dp[i][j] = up + left;
+        return dp[i][j];
+    }
+}
+
+
+// TABULATION
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if( obstacleGrid[i][j] == 1) dp[i][j] = 0;
+                else if(i ==0 && j == 0) dp[i][j] = 1;
+                else {
+                    int up = 0;
+                    int left = 0;
+                    if(i > 0) up = dp[i-1][j];
+                    if(j > 0) left = dp[i][j-1];
+                    dp[i][j] = up + left;
+                }
+            }
+        }
+        return dp[m-1][n-1];
+    }    
+}
+
+
+3. MINIMUM PATH SUM
+
+// RECURSION
+class Solution {
+    public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        
+        return f(m-1, n-1, grid);
+    }
+    
+    public int f(int i, int j, int[][] grid){
+        if(i == 0 && j == 0) return grid[0][0];
+        if(i < 0 || j < 0) return 1000000009;
+        int up = grid[i][j] + f(i-1, j, grid);
+        int left =grid[i][j] +  f(i, j-1, grid);
+        
+        return Math.min(up, left);
+    }
+}
+
+// MEMOIZATION
+class Solution {
+    public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int[][] dp = new int[m][n];
+        for(int[] dps : dp){
+            Arrays.fill(dps, -1);
+        }
+        return f(m-1, n-1, grid, dp);
+    }
+    
+    public int f(int i, int j, int[][] grid, int[][] dp){
+        if(i == 0 && j == 0) return grid[0][0];
+        if(i < 0 || j < 0) return 1000000009;   // for minimal value
+         if(dp[i][j] != -1) return dp[i][j];
+        int up = grid[i][j] + f(i-1, j, grid, dp);
+        int left =grid[i][j] +  f(i, j-1, grid, dp);
+        
+        dp[i][j] =  Math.min(up, left);
+        return dp[i][j];
+    }
+}
+
+
+// TABULATION
+class Solution {
+    public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        
+        int[][] dp = new int[m][n];
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                 if(i == 0 && j == 0) dp[i][j] = grid[i][j];
+                else {
+                    int up = grid[i][j];
+                    if(i > 0) up += dp[i-1][j];
+                    else up += 1000000009;
+                    
+                    int left = grid[i][j];
+                    if(j > 0) left += dp[i][j-1];
+                    else left += 1000000009;
+                    
+                    dp[i][j] = Math.min(up, left);
+                }
+            }
+        }
+        return dp[m-1][n-1];
+    }
+}
+
+
+4. MIN/MAX FALLING PATH SUM  // from any row to any column
+
+//RECURSION
+
+class Solution {
+    public int minFallingPathSum(int[][] matrix) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int res = (int)1e9;
+        
+        for(int j=0; j < m; j++){        
+           res = Math.min(res, minFallPathSum(n-1, j, n, m, matrix));
+        }
+        
+        return res;
+    }
+    
+    public int minFallPathSum(int i, int j, int n, int m, int[][] matrix){
+        if(j < 0 || j >= m) return (int)1e9;
+        if(i == 0) return matrix[0][j];
+        
+        int up = matrix[i][j] + minFallPathSum(i-1, j, n, m, matrix);
+         int ld = matrix[i][j] + minFallPathSum(i-1, j-1, n, m, matrix);
+         int rd = matrix[i][j] + minFallPathSum(i-1, j+1, n, m, matrix);
+        
+        return Math.min(up, Math.min(ld, rd));
+    }
+}
+
+
+// MEMOIZATION
+class Solution {
+    public int minFallingPathSum(int[][] matrix) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+        
+        int[][] dp = new int[n][m];
+        for(int[] p : dp){
+            Arrays.fill(p, -1);
+        }
+        int res = (int)1e9;
+        
+        for(int j=0; j < m; j++){        
+           res = Math.min(res, minFallPathSum(n-1, j, n, m, matrix, dp));
+        }
+        
+        return res;
+    }
+    
+    public int minFallPathSum(int i, int j, int n, int m, int[][] matrix, int[][] dp){
+        if(j < 0 || j >= m) return (int)1e9;
+        if(i == 0) return matrix[0][j];
+        
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        int up = matrix[i][j] + minFallPathSum(i-1, j, n, m, matrix, dp);
+         int ld = matrix[i][j] + minFallPathSum(i-1, j-1, n, m, matrix, dp);
+         int rd = matrix[i][j] + minFallPathSum(i-1, j+1, n, m, matrix, dp);
+        
+        dp[i][j] =  Math.min(up, Math.min(ld, rd));
+        return dp[i][j];
+    }
+}
+
+// TABULATION
+class Solution {
+    public int minFallingPathSum(int[][] matrix) {
+        int m = matrix.length, n = matrix[0].length;
+        int result = Integer.MAX_VALUE;
+        
+        int[][] dp = new int[m][n];
+        
+        //BASE CASE
+        for(int i = 0; i < n; i++) dp[0][i] = matrix[0][i];
+        
+        for(int i = 1; i < m; i++){
+            for(int j = 0; j < n; j++){
+                int up = matrix[i][j] + dp[i - 1][j], left = matrix[i][j], right = matrix[i][j];
+                
+                if(j> 0) left += dp[i - 1][j - 1];
+                else left = (int)Math.pow(10,9);
+                
+                if(j < n - 1) right += dp[i - 1][j + 1];
+                else right = (int)Math.pow(10,9);
+                
+                dp[i][j] = Math.min(up, Math.min(left, right));
+                
+                
+            }
+        }
+        
+        for(int i = 0; i < n; i++)
+            result = Math.min(result, dp[m - 1][i]);
+        
+        return result;
+    }
+}
+
+
+5. NO OF WAYS TO REACH EXACTLY K STEPS
+
+Input: startPos = 1, endPos = 2, k = 3
+Output: 3
+Explanation: We can reach position 2 from 1 in exactly 3 steps in three ways:
+- 1 -> 2 -> 3 -> 2.
+- 1 -> 2 -> 1 -> 2.
+- 1 -> 0 -> 1 -> 2.
+It can be proven that no other way is possible, so we return 3.
+
+class Solution {
+	private int mod = 1000000007;
+
+	public int numberOfWays(int s, int e, int k) {
+		int[][] dp = new int[3002][1001];
+
+		for(int[] item : dp){
+			Arrays.fill(item, -1);
+		}
+		return topDownApproach(s, e, s, k, dp);
+	}
+
+	private int topDownApproach(int s, int e, int curr, int k, int[][] dp){
+
+		if(k == 0){
+			if(curr == e) { return 1; }
+			else { return 0; }
+		}
+
+		if(dp[curr+1001][k] != -1){
+			return dp[curr+1001][k];
+		}
+		// Move right
+		int rightMove = topDownApproach(s, e, curr+1, k-1, dp)%mod;
+		// Move Left
+		int leftMove = topDownApproach(s, e, curr-1, k-1, dp)%mod;
+
+		return dp[curr+1001][k] = (rightMove+leftMove)%mod;
+
+	}
+
+
+}
+
+
+6. NO OF DICE ROLLS WITH TARGET SUM
+
+N - dice and K - faces, find distinct ways to get x sum
+
+class Solution {
+    public int numRollsToTarget(int n, int k, int target) {
+        int mod = 1000000007;
+        int[][] dp = new int[n+1][target+1];
+        for(int[] dps : dp){
+            Arrays.fill(dps, -1);
+        }
+        return solve(n, k, target, dp, mod);
+    }
+    public int solve(int dice, int faces, int target, int[][] dp, int mod){
+        if(target < 0) return 0;
+        if(dice == 0 && target != 0) return 0;
+        if(dice > 0 && target == 0) return 0;
+        if(dice == 0 && target == 0) return 1;
+        
+
+
+
+        if(dp[dice][target] != -1) return dp[dice][target];
+        int ans = 0;
+        for(int i=1; i <= faces; i++){
+            ans = (ans + solve(dice-1, faces, target - i, dp, mod)) % mod;
+            dp[dice][target] = (ans)% mod;
+        }
+        return (dp[dice][target] % mod);
+    }
+}
+
+
+7. DIFFERNT WAYS TO ADD PARENTHESIS
+
+class Solution {
+    public List<Integer> diffWaysToCompute(String expression) {
+         List<Integer> combinedResult = new ArrayList<>();
+        
+        for(int i = 0; i < expression.length(); i++){
+            // if the character at postion 'i' is not a digit then its an operator which means we have an expression
+            if(!Character.isDigit(expression.charAt(i))){        
+                // store the operator 
+                char op = expression.charAt(i);
+                
+                // divide step:
+                // obtain the substring that is to the left of the operator 
+                // and the substring that is to the right of the operator
+                String leftHalf = expression.substring(0, i);
+                String rightHalf = expression.substring(i+1);
+                
+                // conquer step:
+                // recursively find all the ways to compute the left and right halves of the expression 
+                List<Integer> leftResults = diffWaysToCompute(leftHalf);
+                List<Integer> rightResults = diffWaysToCompute(rightHalf);
+                
+                // combine step:
+                // combine the left and right halves by computing the current operation using all of the 
+                // left results with all of the right results
+                for(int leftVal : leftResults){
+                    for(int rightVal : rightResults){
+                        int result = executeOperation(leftVal, rightVal, op);
+                        combinedResult.add(result);
+                    }
+                }           
+            }
+        }
+        
+        // handle the base case where the string passed to the algorithm was just a number or empty string and not an expression
+        if(combinedResult.isEmpty() && !expression.isEmpty()) combinedResult.add(Integer.valueOf(expression));
+        
+        return combinedResult;
+    }
+    
+    public int executeOperation(int x, int y, char op){
+        if(op == '*') return x * y;
+        if(op == '-') return x - y;
+        return x + y;
+    }
+    
+}
+
+
+8. PERMUTATION [1 2 3]
+TC n!*n
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        boolean[] visited = new boolean[nums.length];
+        List<Integer> perm= new ArrayList<>();
+        List<List<Integer>> result = new ArrayList<>();
+        backtracking(nums,visited, perm, result);
+        return result;
+    }
+    private void backtracking(int[] nums, boolean[] visited, List<Integer> perm, List<List<Integer>> result){
+        if (perm.size() == nums.length){
+            result.add(new ArrayList<>(perm));
+            return;
+        }
+        for (int i = 0; i<nums.length; i++){
+            if (visited[i])
+                continue;
+            visited[i] = true;
+            perm.add(nums[i]);
+            backtracking(nums, visited, perm, result);
+            perm.remove(perm.size() -1);
+            visited[i] = false;
+        }
+    }
+}
+
+
+9. SUBSET SUM EQUAL TARGET
+eg; [1,2,3,4] return true, as there are 2 subsets with sum equal to 4 {1,3} and {4}
+
+TC AND SC -> O(N*TARGET)
+class TUF{
+static boolean subsetSumUtil(int ind, int target,int[] arr,int[][] dp){
+    if(target==0)
+        return true;
+    
+    if(ind == 0)
+        return arr[0] == target;
+    
+    if(dp[ind][target]!=-1)
+        return dp[ind][target]==0?false:true;
+        
+    boolean notTaken = subsetSumUtil(ind-1,target,arr,dp);
+    
+    boolean taken = false;
+    if(arr[ind]<=target)
+        taken = subsetSumUtil(ind-1,target-arr[ind],arr,dp);
+        dp[ind][target]=notTaken||taken?1:0;
+    return notTaken||taken;
+}
+
+static boolean subsetSumToK(int n, int k,int[] arr){
+    
+    int dp[][]=new int[n][k+1];
+    for(int row[]: dp)
+    Arrays.fill(row,-1);
+    return subsetSumUtil(n-1,k,arr,dp);
+}
+
+// DP SOLUTION
+static boolean subsetSumToK(int n, int k,int[] arr){
+    
+    
+    boolean dp[][]= new boolean[n][k+1];
+    
+    for(int i=0; i<n; i++){
+        dp[i][0] = true;
+    }
+    
+    if(arr[0]<=k)
+        dp[0][arr[0]] = true;
+    
+    for(int ind = 1; ind<n; ind++){
+        for(int target= 1; target<=k; target++){
+            
+            boolean notTaken = dp[ind-1][target];
+    
+            boolean taken = false;
+                if(arr[ind]<=target)
+                    taken = dp[ind-1][target-arr[ind]];
+        
+            dp[ind][target]= notTaken||taken;
+        }
+    }
+    
+    return dp[n-1][k];
+}
+
+
+10. PARTITION EQUAL SUBSET SUM
+
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int n = nums.length;
+        int sum = 0;
+        for(int num: nums) sum += num;
+       return sum % 2 == 1 ? false : subsetSumToK(n, sum / 2, nums);
+    }
+    
+    public boolean subsetSumToK(int n, int k, int[] arr){
+    
+    
+     boolean dp[][]= new boolean[n][k+1];
+    
+    for(int i=0; i<n; i++){
+        dp[i][0] = true; 
+    }
+    
+     if(arr[0]<=k)
+        dp[0][arr[0]] = true;
+    
+    for(int ind = 1; ind<n; ind++){
+        for(int target= 1; target<=k; target++){
+            
+            boolean notTaken = dp[ind-1][target];
+    
+            boolean taken = false;
+                if(arr[ind]<=target)
+                    taken = dp[ind-1][target-arr[ind]];
+        
+            dp[ind][target]= notTaken||taken;
+        }
+    }
+    
+    return dp[n-1][k];
+  }
+}
+
+
+11. MIN ABSOLUTE SUBSET SUM DIFFERENCE
+
+class Solution {
+    public int minimumDifference(int[] nums) {
+        int n = nums.length;
+         int totSum = 0;
+
+          for (int i = 0; i < n; i++) {
+            totSum += nums[i];
+          }
+        
+        int k = totSum;
+        
+        boolean dp[][]= new boolean[n][k+1];
+    
+    for(int i=0; i<n; i++){
+        dp[i][0] = true;
+    }
+    
+     if(nums[0]<=k)
+        dp[0][nums[0]] = true;
+    
+    for(int ind = 1; ind<n; ind++){
+        for(int target= 1; target<=k; target++){
+            
+            boolean notTaken = dp[ind-1][target];
+    
+            boolean taken = false;
+                if(nums[ind]<=target)
+                    taken = dp[ind-1][target-nums[ind]];
+        
+            dp[ind][target]= notTaken||taken;
+        }
+    }
+        
+        int mini = Integer.MAX_VALUE;
+  for (int i = 0; i <= totSum/2; i++) {
+    if (dp[n - 1][i] == true) {
+      int diff = Math.abs(i - (totSum - i));
+      mini = Math.min(mini, diff);
+    }
+  }
+  return mini;
+        
+    }
+}
+
+
+
+12. PARTITION K EQUAL SUBSET SUM
+
+Input: nums = [4,3,2,3,5,2,1], k = 4
+Output: true
+Explanation: It is possible to divide it into 4 subsets (5), (1, 4), (2,3), (2,3) with equal sums.
+
+class Solution {
+ 
+    (2^(k*n))
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        Arrays.sort(nums);
+        reverse(nums);
+           int sum = 0;
+        for(int num:nums)sum += num;
+        if(nums.length < k || sum%k != 0)return false;
+        int[] visited = new int[nums.length];
+        return canPartition(nums, visited, 0, k, 0, sum/k);
+    }
+    
+    public boolean canPartition(int[] nums, int[] visited, int start_index, int k, int cur_sum, int target){
+        if(k==0)return true;
+        if(curr_sum > target)return false;
+        if(cur_sum == target)return canPartition(nums, visited, 0, k-1, 0, target);
+
+        for(int i = start_index; i<nums.length; i++){
+            if(visited[i] == 0){
+                visited[i] = 1;
+                if(canPartition(nums, visited, i+1, k, cur_sum + nums[i], target))return true;
+                visited[i] = 0;
+            }
+        }
+        return false;
+        
+        }
+    }
+
+
+
+13. FACTORIAL OF A NUMBER
+
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+	 public static void main(String[] arg){
+		   Scanner t = new Scanner(System.in);
+		   System.out.println("Enter the value");
+		   int n = t.nextInt();
+		   int f = factorial(n);
+		   System.out.println(f);
+		     
+		  }
+	 public static int factorial(int n) {
+		 if (n == 1) {
+			 return 1;
+		 }
+		int fn1 = factorial(n-1);
+		int fact = n * fn1;
+		return fact;
+	 }
+		}
+
+
+
+13 A)  FACTORIAL OF A LARGE NUMBER
+
+package automate;
+import java.io.*;
+import java.math.BigInteger;
+import java.util.*;
+
+
+public class MyClass {
+	  
+	 public static void main(String[] arg){
+		   Scanner t = new Scanner(System.in);
+		   System.out.println("Enter the value");
+		   int n = t.nextInt();
+		    factorialofLargenumber(n);
+		  }
+	 
+	 
+	 public static void factorialofLargenumber(int n) {
+		BigInteger factorial = BigInteger.ONE;
+		
+		if(n < 0) {
+			System.out.println("Can't find factorial of negative number");
+		} 
+		else {
+			for(int counter = n; counter >= 2; counter--) {
+			factorial = factorial.multiply(BigInteger.valueOf(counter));
+		}
+			
+	 }
+ }
+}
+		
+
+
+
+14. POWER CALCULATION  (LINEAR)
+
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+	 public static void main(String[] arg){
+		   Scanner t = new Scanner(System.in);
+		   System.out.println("Enter the value");
+		   int x = t.nextInt();
+		   int n = t.nextInt();
+		   int pow = power(x , n);
+		   System.out.println(pow);
+		     
+		  }
+	 public static int power(int x, int n) {
+		 if (n == 0) {
+			 return 1;
+		 }
+		int xnm1 = power(x, n-1);
+		int po = x * xnm1;
+		return po;
+	 }
+		}
+
+
+14 A)   POWER CALCULATION   (LOGARITHMIC)
+
+class Solution {
+    
+    public double myPow(double x, int n) {
+        
+        if(n < 0){
+            return 1.0/helper(x, Math.abs(n));
+        }
+        
+        return helper(x, n);
+        
+    }
+    
+    
+    public double helper(double x, int n){
+        
+         if (n == 0) {
+			 return 1;
+		 }
+      
+          if (n == 1) {
+			 return x;
+		 }
+        
+        
+        if(n % 2 == 0){
+           return helper(x * x , n/2);
+        }
+        
+        return x *  helper(x * x , n/2);
+        
+        
+    }
+}
+                      
+
+
+15. TOWER OF HANOI
+
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+	 public static void main(String[] arg){
+		   Scanner t = new Scanner(System.in);
+		   System.out.println("Enter the value");
+		 
+		    int n = t.nextInt();
+		    System.out.println("Enter the value");
+		   int n1 = t.nextInt();
+		    int n2 = t.nextInt();
+		
+		    int n3 = t.nextInt();
+
+		    toh(n, n1, n2, n3);
+		  }
+
+		  public static void toh(int n, int  t1id, int t2id, int t3id){
+		    if(n == 0){
+		      return;
+		    }
+		    
+		    toh(n - 1, t1id, t3id, t2id);
+		    System.out.println(n + "[" + t1id + " -> " + t2id + "]");
+		    toh(n - 1, t3id, t2id, t1id);
+		  }
+
+		}
+
+
+
+16. GET SUBSEQUENCE
+
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+	 public static void main(String[] args){
+		Scanner t = new Scanner(System.in);
+		System.out.println("Enter the string");
+	        String str = t.nextLine();
+	        ArrayList<String> ss = gss(str);
+	        System.out.println(ss);
+	    }
+
+	    public static ArrayList<String> gss(String str) {
+	        if(str.length() == 0){
+	            ArrayList<String> bres = new ArrayList<>();
+	            bres.add("");
+	            return bres;
+	        }
+
+	        char ch = str.charAt(0);  // a
+	        String ros = str.substring(1);  //bc
+
+	        ArrayList<String> rres = gss(ros); //[--, -c, b-, bc]
+	        ArrayList<String> mres = new ArrayList<>();
+
+	        for(String rstr: rres){
+	            mres.add("" + rstr);
+	            mres.add(ch + rstr);
+	        }
+	        return mres;
+	    }
+	}
+
+
+17. GET KEYPAD CODES
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+	 public static void main(String[] args) throws Exception {
+	        Scanner t = new Scanner(System.in);
+	        System.out.println("Enter the string or value");
+	        String str = t.nextLine();
+	        ArrayList<String> words = getKPC(str);
+	        System.out.println(words);
+	    }
+
+	    static String[] codes = {".;", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tu", "vwx", "yz"};
+	    public static ArrayList<String> getKPC(String str) {
+	    	
+	    	 if(str.length() == 0){
+		            ArrayList<String> bres = new ArrayList<>();
+		            bres.add("");
+		            return bres;
+		        }
+	    	 
+	    	char ch = str.charAt(0);
+	    	String ros = str.substring(1);
+	    	ArrayList<String> rres = getKPC(ros);
+	    	ArrayList<String> mres = new ArrayList<>();
+	    	String codeforch = codes[ch - '0'];
+	    	
+	       
+
+	    
+             for(int i = 0; i < codeforch.length(); i++) {
+	            char chcode = codeforch.charAt(i);
+	            for(String rstr: rres){
+	                mres.add(chcode + rstr);
+	            }
+	        }
+
+	        return mres;
+	    }
+	}
+
+
+
+18. COMBINATION SUM
+
+Input: candidates = [2,3,6,7], target = 7
+Output: [[2,2,3],[7]]
+Explanation:
+2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
+
+TC : O(2^t * K) k for every recursion call SC O(K * X)
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+            List<List<Integer>> result = new ArrayList<>();
+          
+            backtrack(candidates, 0, target,  new ArrayList<>(), result);
+            return result;
+}
+
+private void backtrack(int[] cand, int start, int target, List<Integer> list,  List<List<Integer>> result){
+    if(target < 0) return;
+    
+     if(target == 0) result.add(new ArrayList<>(list));  k is average length
+     
+        for(int i = start; i < cand.length; i++){
+            list.add(cand[i]);
+            backtrack(cand, i, target - cand[i], list, result); // not i + 1 because we can reuse same elements
+            list.remove(list.size() - 1);
+        }
+    
+}
+}
+
+
+19. COMBINATION SUM II
+
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+         List<List<Integer>> result = new ArrayList<>();
+         Arrays.sort(candidates);
+          
+         backtrack(candidates, 0, target,  new ArrayList<>(), result);
+         return result;
+}
+
+private void backtrack(int[] cand, int start, int target, List<Integer> list,  List<List<Integer>> result){
+    if(target < 0) return;
+    
+     if(target == 0){
+         result.add(new ArrayList<>(list));
+         
+     }
+     
+        for(int i = start; i < cand.length; i++){
+            
+              if(i > start && cand[i] == cand[i-1]) continue;
+            
+            list.add(cand[i]);
+            backtrack(cand, i + 1, target - cand[i], list, result); 
+            list.remove(list.size() - 1);
+        }
+    
+}
+    
+}
+
+
+20. COMBINATION SUM III
+
+Input: k = 3, n = 9
+Output: [[1,2,6],[1,3,5],[2,3,4]]
+Explanation:
+1 + 2 + 6 = 9
+1 + 3 + 5 = 9
+2 + 3 + 4 = 9
+There are no other valid combinations.
+
+class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> result = new ArrayList<>();
+          
+            backtrack(1, k, n,  new  ArrayList<>(), result);
+            return result;
+}
+
+private void backtrack( int start, int k, int n,  List<Integer> list,  List<List<Integer>> result){
+    if(k< 0 || n < 0) return;
+    
+     if(k == 0 && n == 0) result.add(new ArrayList<>(list));
+     
+        for(int i = start; i <= 9; i++){
+            list.add(i);
+            backtrack( i+1, k - 1, n - i,  list, result); 
+           list.remove(list.size() - 1);
+        }
+    
+
+        
+    }
+}
+
+
+
+
+21. COMBINATION SUM IV
+
+Input: nums = [1,2,3], target = 4
+Output: 7
+Explanation:
+The possible combination ways are:
+(1, 1, 1, 1)
+(1, 1, 2)
+(1, 2, 1)
+(1, 3)
+(2, 1, 1)
+(2, 2)
+(3, 1)
+Note that different sequences are counted as different combinations.
+
+//RECURSIVE
+
+public int combinationSum4(int[] nums, int target) {
+    if (target == 0) {
+        return 1;
+    }
+    int res = 0;
+    for (int i = 0; i < nums.length; i++) {
+        if ( nums[i] <= target ) {
+            res += combinationSum4(nums, target - nums[i]);
+        }
+    }
+    return res;
+}
+
+
+
+	TC = N*target
+class Solution {
+    private int[] dp;
+
+public int combinationSum4(int[] nums, int target) {
+    dp = new int[target + 1];
+    Arrays.fill(dp, -1);
+    dp[0] = 1;
+    return helper(nums, target);
+return dp[target];
+}
+
+private int helper(int[] nums, int target) {
+    if (dp[target] != -1) {
+        return dp[target];
+    }
+    int res = 0;
+    for (int i = 0; i < nums.length; i++) {
+        if (nums[i] <= target) {
+            res += helper(nums, target - nums[i]);
+        }
+    }
+    dp[target] = res;
+    return dp[target];
+}
+}
+
+
+
+22. PRINT ENCODING
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+    public static void main(String[] args) throws Exception {
+        Scanner t = new Scanner(System.in);
+        System.out.println("Enter the value");
+        String str = t.nextLine();
+        printEncodings(str, "");
+    }
+
+    public static void printEncodings(String ques, String ans) {
+        if (ques.length() == 0) {
+            System.out.println(ans);
+            return;
+        } else if (ques.length() == 1) {
+        char ch = ques.charAt(0);
+        if(ch == '0') {
+                return;
+            } else {
+               int chv = ch - '0';
+               char code = (char)('a' + chv - 1);
+               ans = ans + code;
+               System.out.println(ans);
+            }
+        } else {
+        	   char ch = ques.charAt(0);
+        	   String roq = ques.substring(1);
+        	   if(ch == '0') {
+                return;
+            } else {
+            	   int chv = ch - '0';
+                   char code = (char)('a' + chv - 1);
+                printEncodings(roq, ans + code);
+		}
+                String ch12 = ques.substring(0, 2);
+                String roq12 = ques.substring(2);
+       int ch12v = Integer.parseInt(ch12);
+       if(ch12v <= 26) {
+    	   char codev = (char)('a' + ch12v - 1);
+           printEncodings(roq12, ans + codev);
+                }
+            }
+        }
+    }
+} 
+
+
+
+
+23. RAT IN A MAZE
+
+class Solution {
+    //TC (4^N*M)
+    public static ArrayList<String> findPath(int[][] m, int n) {
+        ArrayList<String> paths = new ArrayList<>();
+            findAllPathsInMaze(m, 0, 0, paths, "");
+         return paths;
+    }
+    
+     static void findAllPathsInMaze(int[][] maze, int i, int j, ArrayList<String> paths, String path) {
+       if (i < 0 || j < 0 || i > maze.length - 1 || j > maze.length - 1 || maze[i][j] == 0) {
+         return;
+       }
+       if (i == maze.length - 1 && j == maze.length - 1) {
+           paths.add(path);
+       }
+   
+       maze[i][j] = 0;
+       findAllPathsInMaze(maze, i + 1, j, paths, path+"D");
+       findAllPathsInMaze(maze, i, j + 1, paths, path+"R");
+       findAllPathsInMaze(maze, i - 1, j, paths, path+"U");
+       findAllPathsInMaze(maze, i, j - 1, paths, path+"L");
+       maze[i][j] = 1;
+     }
+}
+
+
+
+
+24. NON-DECREASING SUBSEQUENCE
+
+Input: nums = [4,6,7,7]
+Output: [[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]
+
+class Solution {
+    public List<List<Integer>> findSubsequences(int[] nums) {
+        Set<List<Integer>> res=new HashSet<List<Integer>>();
+        List<Integer> sequence=new ArrayList<>();
+        helperBacktrack(nums,0,sequence,res);
+        return new ArrayList<>(res);
+    }
+    private void helperBacktrack(int[] nums,int index,List<Integer> sequence,Set<List<Integer>> res){
+            if(sequence.size()>=2){ // if the length of the current subsequence is at-least 2 then add it to res
+                res.add(new ArrayList<>(sequence));
+            }
+
+        for (int i = index; i < nums.length; i++) {//start from index
+            //if the sequence remains increasing after appending nums[i]
+            if (sequence.isEmpty() || sequence.get(sequence.size() - 1) <= nums[i]) {
+                //append nums[i] to the sequence
+                sequence.add(nums[i]);
+                //call recursively for i+1
+                helperBacktrack(nums, i + 1, sequence, res);
+                //delete nums[i] from the end of the sequence
+                sequence.remove(sequence.size() - 1);
+            }
+        }
+    }
+}
+
+
+2. BINARY TREE FACTOR
+
+class Solution {
+    public int numFactoredBinaryTrees(int[] arr) {
+        if(arr == null ||arr.length ==0){
+            return 0;
+        }
+        Arrays.sort(arr); // O(nlogn)
+
+        Map<Integer, Long> map = new HashMap<>();
+
+
+        for(int i=0;i< arr.length;i++){ // O(n2)
+            long count = 1l;
+            for(int j=0;j<i;j++){
+
+
+
+                if(arr[i] % arr[j] == 0 && map.containsKey(arr[i]/arr[j])){
+                    count += map.get(arr[j]) * map.get(arr[i]/arr[j]);
+                }
+
+
+            }
+            map.put(arr[i], count);
+        }
+
+
+        long totalCount = 0l;
+
+        for(Map.Entry<Integer, Long> entry: map.entrySet()){
+            totalCount += entry.getValue();
+            
+        }
+
+        return (int)(totalCount % (1000000000 + 7));
+    }
+}
+
+
+25. FAIR DISTRIBUTION OF COOKIES
+
+class Solution {
+         private   int res = Integer.MAX_VALUE;
+    public int distributeCookies(int[] cookies, int k) {
+
+                    dfs(cookies, 0, k, new int[k]);
+                    return res;
+              }
+
+void dfs(int[] cookies, int cur, int k, int[] children) {
+    if (cur == cookies.length) {
+        int max = 0;
+        for (int c : children) max = Math.max(max, c);
+        res = Math.min(res, max);
+        return;
+    }
+    for (int i = 0; i < k; i++) {
+        children[i] += cookies[cur];
+        dfs(cookies, cur + 1, k, children);
+        children[i] -= cookies[cur];
+    }
+(k^lengthOfArray)*k since for each number we have k choices and then we are calculating the max amoung the bags k we have so for that *k is done.
+}
+  
+
+26. PALINDROME PARTITIONING
+
+class Solution {
+    public List<List<String>> partition(String s) {
+    List<String> list = new ArrayList<>();
+    backtrack(s, list);
+    return al;
+}
+Time complexity: O(n*(2^n))
+For a string with length n, there will be (n - 1) intervals between chars.
+For every interval, we can cut it or not cut it, so there will be 2^(n - 1) ways to partition the string.
+For every partition way, we need to check if it is palindrome, which is O(n).
+So the time complexity is O(n*(2^n))
+
+List<List<String>> al = new ArrayList<>();
+public void backtrack(String str, List<String> list){
+    if(str.length() == 0){
+        al.add(new ArrayList<>(list));
+        return;
+    }
+    
+    for(int i=0; i<str.length(); i++){
+        String prefix = str.substring(0, i+1);
+        String ros = str.substring(i+1);
+        
+        if(isPalindrome(prefix)){
+            list.add(prefix);
+            backtrack(ros, list);
+            list.remove(list.size()-1);
+        }
+        
+        
+    }  
+    
+}
+
+boolean isPalindrome(String str){
+  int l = 0;
+	int r = str.length()-1;
+	
+	while(l < r) {
+		char left = str.charAt(l);
+		char right = str.charAt(r);
+		if(left != right) {
+			return false;
+		}
+		
+		l++;
+		r--;
+	}
+	
+	return true;
+}
+}
+
+
+
+27. FIND 3 DIGIT EVEN NUMBER
+
+class Solution {
+    HashSet<Integer> set = new HashSet<>();
+    public int[] findEvenNumbers(int[] digits) {
+        boolean[] isUsed = new boolean[digits.length];
+        backtrack(digits, 0, new String(), isUsed);
+        int[] res = set.stream().sorted().mapToInt(i -> i).toArray();
+        return res;
+    }
+    private void backtrack(int[] digits, int idx, String curr, boolean[] isUsed) {
+        if (idx == 3) {
+            int val = Integer.parseInt(curr);
+            if (val % 2 == 0) set.add(val);
+            return;
+        } 
+        for (int i = 0; i < digits.length; i++) {
+            if (isUsed[i] || (idx == 0 && digits[i] == 0 ) || ( idx == 2 && digits[i] % 2 != 0)) continue;
+            isUsed[i] = true;
+            backtrack(digits, idx + 1, curr + digits[i], isUsed);
+            isUsed[i] = false;
+        }
+    }
+}
+
+
+class Solution {
+  
+    public int[] findEvenNumbers(int[] digits) {
+       int[] freq = new int[10];
+        List<Integer> res = new ArrayList<>();
+        for(int i : digits) freq[i]++;
+        for(int i = 100; i <= 998; i+=2){
+            int[] temp = freq.clone();
+            if(solve(temp, i)){
+                res.add(i);
+            }
+        }
+        
+        int[] ans = res.stream().mapToInt(i->i).toArray();
+        return ans;
+    }
+    
+    boolean solve(int[] freq, int num){
+        
+        while(num != 0){
+            int r = num % 10;
+            if(freq[r] > 0) freq[r]--;
+            else return false;
+            num = num / 10;
+        }
+        
+        return true;
+    }
+}
+
+
+
+
+28. LETTER CASE PERMUTATION
+
+a1b2 
+TC - O(2^N)  SC - O(N * (2^N)) N - no of character
+
+class Solution {
+    public List<String> letterCasePermutation(String S) {
+         if (S == null) {
+            return new LinkedList<>();
+        }
+        int n = S.length();
+        LinkedList<String> queue = new LinkedList<>();
+        queue.add(S);
+        
+        for (int i = n-1; i >= 0; i--) {
+            char c = S.charAt(i);
+            if (Character.isDigit(c)) continue; 
+            
+            int size = queue.size();
+            while(size-- > 0) {
+                String curr = queue.poll();
+                String left = curr.substring(0, i);
+                String right = curr.substring(i+1, n);
+                queue.add(left + Character.toLowerCase(c) + right);
+                  queue.add(left + Character.toUpperCase(c) + right);
+                
+                
+            }
+        }
+        
+        return queue;
+    }
+}
+
+
+
+29. GENERATE PARENTHESIS
+
+TC -> 2^n * K where k maps to 2N 
+
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> list = new ArrayList<String>();
+        backtrack(list, new StringBuilder(), 0, 0, n);
+        return list;
+    }
+    
+    public void backtrack(List<String> list, StringBuilder str, int open, int closed, int n){
+        
+        //aborting condition
+        if(closed > open){
+            return;
+        }
+        
+        if(closed == open && str.length() == 2*n){
+            list.add(str.toString());
+            return;
+        }
+         
+        if(open < n){
+            str.append("(");
+            backtrack(list, str, open+1, closed, n);
+            str.deleteCharAt(str.length() - 1);
+        }
+          if(closed < open){
+            str.append(")");
+            backtrack(list, str, open, closed+1, n);
+            str.deleteCharAt(str.length() - 1);
+        }
+    }
+}
+
+
+30. ONES AND ZEROS
+
+class Solution {
+    
+    int[][][] dp;
+    public int findMaxForm(String[] strs, int m, int n) {
+        dp = new int[m+1][n+1][strs.length];
+        return helper(strs, m, n, 0);
+    }
+    
+    public int helper(String[] strs, int zero, int one, int index){
+        if(index == strs.length || zero + one == 0){
+            return 0;
+        }
+        
+        if(dp[zero][one][index] > 0){
+            return dp[zero][one][index];
+        }
+        
+        int[] count = count(strs[index]);
+        
+        //consider changes the zero and one
+        int consider = 0;
+        
+        if(zero >= count[0] && one >= count[1]){
+            consider = 1 + helper(strs, zero - count[0], one - count[1], index + 1);
+        }
+        
+        //skip
+        int skip = helper(strs, zero, one, index+1);
+        
+        dp[zero][one][index] =  Math.max(consider, skip);
+        return  dp[zero][one][index];
+        
+    }
+    
+    public int[] count(String s){
+        int[] count = new int[2];
+        for(char c : s.toCharArray()){
+            count[c - '0']++;
+        }
+        return count;
+    }
+}
+
+
+
+31. ITERATOR FOR COMBINATION
+
+class CombinationIterator {
+    
+    PriorityQueue<String> pq = new PriorityQueue<>();
+    public CombinationIterator(String characters, int combinationLength) {
+         generateSub(characters, 0, combinationLength, new StringBuilder());
+    }
+    
+    private void generateSub(String s , int start, int len, StringBuilder result) {
+        if (result.length() == len){
+            pq.add(result.toString());
+            return;
+        }
+        for (int i = start; i < s.length(); i++){
+            result.append(s.charAt(i));
+            generateSub(s, i+1, len,  result);
+            result.deleteCharAt(result.length()-1);
+        }
+    }
+    
+    
+    public String next() {
+         return pq.poll();
+    }
+    
+    public boolean hasNext() {
+        return !pq.isEmpty();
+    }
+}
+
+
+
+32. MIN REPLACEMENT TO SORT THE ARRAY
+
+public long minimumReplacement(int[] nums) {
+        //the number of splits required, we need to minimize this
+        long operations = 0;
+        
+        //prev will contain the value of previous number (if it was not splitted) or value of smallest element in the splitted set of previous number
+        double prev = nums[nums.length-1];
+        
+        //traverse array in reverse order from second last element
+        for(int i = nums.length - 2; i >= 0; i--){
+            
+           /**
+              Number of buckets required will be Math.ceil(nums[i]/prev);
+			  Each bucket will be tried to fill equally. 
+			  Minimum water in each bucket will be nums[i]/prev. 
+			  Remaining nums[i]%prev water will be distributed to any random bucket(s).
+              splits required will be buckets - 1;
+            **/
+            
+            int buckets = (int)Math.ceil(nums[i]/prev);
+            int splits = buckets - 1;
+            operations += splits;
+            
+            /**
+            If previous element was greater or same
+            ony one bucket will be required and new value for prev will be nums[i]/(1) = nums[i].
+            
+            else 
+			current element will be splitted,
+            smallest splitted element will be currentNumber/buckets = nums[i]/(buckets).
+            **/
+            prev = nums[i]/(buckets);
+        }
+        return operations;
+
+
+
+33. VALID SUDOKU
+
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+         Set<String> seen = new HashSet();
+    for (int i=0; i<9; ++i) {
+        for (int j=0; j<9; ++j) {
+            char number = board[i][j];
+            if (number != '.')
+                if (seen.contains(number + " in row " + i) ||
+                    seen.contains(number + " in column " + j) ||
+                    seen.contains(number + " in block " + i/3 + "-" + j/3))
+                    return false;
+		else
+			  seen.add(number + " in row " + i) ||
+                    seen.add(number + " in column " + j) ||
+                    seen.add(number + " in block " + i/3 + "-" + j/3)
+        }
+    }
+    return true;
+    }
+}
+
+
+34. SUDOKU SOLVER
+
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+	 public static void display(int[][] board){
+		    for(int i = 0; i < board.length; i++){
+		      for(int j = 0; j < board[0].length; j++){
+		        System.out.print(board[i][j] + " ");
+		      }
+		      System.out.println();
+		    }
+		  }
+
+		  public static void solveSudoku(int[][] board, int i, int j) {
+		    if (i == board.length){
+		      display(board);
+		      return;
+		    }
+
+		    int ni = 0;
+		    int nj = 0;
+
+		    if(j == board[0].length - 1){
+		      ni = i + 1;
+		      nj = 0;
+		    } else {
+		      ni = i;
+		      nj = j + 1;
+		    }
+
+		    if(board[i][j] != 0){
+		      solveSudoku(board, ni, nj);
+		    } else {
+		      for(int po = 1; po <= 9; po++){
+		        if(isValid(board, i, j, po)== true){
+		          board[i][j] = po;
+		          solveSudoku(board, ni, nj);
+		          board[i][j] = 0;
+		        }
+		      }
+		    }
+		  }
+O(9^(n*n)).
+		  public static boolean isValid(int[][] board, int x, int y, int val) {
+		    
+		    for (int j = 0; j < board[0].length; j++) {
+		      if (board[x][j] == val) {
+		        return false;
+		      }
+		    }
+
+		    for (int i = 0; i < board[0].length; i++) {
+		      if (board[i][y] == val) {
+		        return false;
+		      }
+		    }
+
+		    int smi = x / 3 * 3;
+		    int smj = y / 3 * 3;
+		    for (int i = 0; i < 3; i++) {
+		      for (int j = 0; j < 3; j++) {
+		        if (board[smi + i][smj + j] == val) {
+		          return false;
+		        }
+		      }
+		    }
+
+		    return true;
+		  }
+
+		  public static void main(String[] args) throws Exception {
+		    Scanner scn = new Scanner(System.in);
+		    System.out.println("Enter the value");
+		    int[][] arr = new int[9][9];
+		    for (int i = 0; i < 9; i++) {
+		      for (int j = 0; j < 9; j++) {
+		        arr[i][j] = scn.nextInt();
+		      }
+		    }
+
+		    solveSudoku(arr, 0, 0);
+		  }
+		}
+
+
+35. HOW TO PRINT ABBREVIATION USING RECURSION
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void solution(String str, String asf,int count, int pos){
+        if(pos == str.length()){
+            if(count == 0){
+                 System.out.println(asf);
+                
+            }else{
+            System.out.println(asf + count);
+             }
+            return;
+        }
+        solution(str, asf + (count > 0 ? count : "" ) + str.charAt(pos), 0, pos + 1); //yes call -> including curr char
+        solution(str, asf, count + 1, pos + 1); //not including curr char -> just converting letters to a number
+    }
+
+	public static void main(String[] args) {
+        Scanner scn = new Scanner(System.in);
+        String str = scn.nextLine();
+        solution(str,"",0,0);
+     
+    }
+}
+
+
+36. N-QUEENS PROBLEM
+
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+	
+	 int count = 0;
+    public int totalNQueens(int n) {
+        boolean[][] board = new boolean[n][n];
+	    boolean[] cols = new boolean[n];
+	    boolean[] ndiag = new boolean[2 * n - 1];
+	    boolean[] rdiag = new boolean[2 * n - 1];
+	   solution(board, 0, cols, ndiag, rdiag, "");
+        return count;
+        
+    }
+    
+    public  void solution(boolean[][] board, int row, boolean[] cols, boolean[] ndiag, boolean[] rdiag, String asf) {
+      
+	    if (row == board.length) {
+	      System.out.println(asf + ".");
+          count++;
+	     
+	    }
+
+	    for (int col = 0; col < board.length; col++) {
+	      if (!cols[col] && !ndiag[row + col] && !rdiag[row - col + board.length - 1]) {
+	        board[row][col] = true;
+	        cols[col] = true;
+	        ndiag[row + col] = true;
+	        rdiag[row - col + board.length - 1] = true;
+	        solution(board, row + 1, cols, ndiag, rdiag, asf + row + "-" + col + ", ");
+	        board[row][col] = false;
+	        cols[col] = false;
+	        ndiag[row + col] = false;
+	        rdiag[row - col + board.length - 1] = false;
+	      }
+	    }
+	  }
+
+	}
+
+
+
+37. WORD BREAK PROBLEM
+
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+	
+
+	public static void main(String[] args) { 
+		Scanner scn = new Scanner(System.in);
+		System.out.println("Enter the value");
+		int n = scn.nextInt();
+		HashSet<String> dict = new HashSet<>();
+		System.out.println("Enter the value");
+		for(int i = 0  ; i  < n; i++){
+			dict.add(scn.next());
+		}
+		System.out.println("Enter the value");
+		String sentence = scn.next();
+		wordBreak(sentence,"", dict); 
+	}
+
+	public static void wordBreak(String str, String ans, HashSet<String> dict){
+		if(str.length() == 0){
+			System.out.println(ans);
+			return;
+		}
+		for(int i = 0; i < str.length(); i++){
+			String left = str.substring(0, i + 1);
+			if(dict.contains(left)){
+				String right = str.substring(i + 1);
+				wordBreak(right, ans + left + " ", dict);
+			}
+		}
+	}
+		
+}
+
+
+38. COUNT ALL POSSIBLE ROUTES
+
+// Input: locations = [2,3,6,8,4], start = 1, finish = 3, fuel = 5
+// Output: 4
+// Explanation: The following are all possible routes, each uses 5 units of fuel:
+// 1 -> 3
+// 1 -> 2 -> 3
+// 1 -> 4 -> 3
+// 1 -> 4 -> 2 -> 3
+
+class Solution {
+    
+   private int n;
+    private int[][] dp;
+     private int MOD = (int)1e9 + 7;
+    
+    public int solve(int[] locations, int i, int finish, int fuel){
+        
+        if(fuel < 0){
+            return 0;
+        }
+        
+        if(dp[i][fuel] != -1){
+            return dp[i][fuel];
+        }
+        
+        int ans = 0;
+        
+        if(i == finish){
+            ans += 1;
+        }
+        
+        for(int j=0; j < n; j++){
+            if(i != j){
+                int remaining_fuel = fuel - Math.abs(locations[i] - locations[j]);
+                
+                ans = (ans + solve(locations, j, finish, remaining_fuel)) % MOD;
+            }
+        }
+        return dp[i][fuel] = ans;
+    }
+    
+    public int countRoutes(int[] locations, int start, int finish, int fuel) {
+         n = locations.length;
+        dp = new int[101][201];
+        
+       for(int[] t : dp){
+           Arrays.fill(t, -1);
+       }
+        
+        return solve(locations, start, finish, fuel);
+    }
+}
+
+
+39. GAME OF EXECUTION (JOSEPHUS PROBLEM )
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+	  public static void main(String[] args) {
+	        Scanner scn = new Scanner(System.in);
+	        System.out.println("Enter the value");
+	        int n = scn.nextInt();
+	        int k = scn.nextInt();
+	        System.out.println(solution(n, k));
+	    }
+
+	    public static int solution(int n, int k) {
+	        if (n == 1) {
+	            return 0;
+	        } else { 
+	            int x = solution(n-1, k);
+	            int y = (x+k) % n;
+	            return y;
+	        }
+	    }
+ 
+
+	}
+
+class Solution {
+    public int findTheWinner(int n, int k) {
+        int result = 0;
+        for(int i=1; i<=n; i++) {
+            result = (result + k) % i;
+        }
+        return result + 1;
+    }
+}
+
+
+
+40. GOLDMINE II (Path with maximum gold)
+
+class Solution {
+   int r = 0;
+    int c = 0;
+    int max = 0;
+    public int getMaximumGold(int[][] grid) {
+        r = grid.length;
+        c = grid[0].length;
+        for(int i = 0; i < r; i++) {
+            for(int j = 0; j < c; j++) {
+                if(grid[i][j] != 0) {
+                    dfs(grid, i, j, 0);
+                }
+            }
+        }
+        return max;
+    }
+    
+    private void dfs(int[][] grid, int i, int j, int cur) {
+        if(i < 0 || i >= r || j < 0 || j >= c || grid[i][j] == 0) {
+            max = Math.max(max, cur);
+            return;
+        }
+        int val = grid[i][j];
+        grid[i][j] = 0;  
+        dfs(grid, i + 1, j, cur + val);
+        dfs(grid, i - 1, j, cur + val);
+        dfs(grid, i, j + 1, cur + val);
+        dfs(grid, i, j - 1, cur + val);
+        grid[i][j] = val;
+    }
+}
+}
+
+
+
+
+41. QUEEN PERMUTATION ( queen chooses )
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+	 public static void queensPermutations(int qpsf, int tq, int[][] chess) {
+	        if (qpsf == tq) {
+	            for (int row = 0; row < chess.length; row++) {
+	                for (int col = 0; col < chess[0].length; col++) {
+	                	if(chess[row][col] == 0) {
+	                		 System.out.print("-\t");
+	                	} else {
+	                		System.out.println( "q" + chess[row][col] + "\t" ); 
+	                	}
+	                   
+	                }
+	                System.out.println();
+	            }
+	            System.out.println();
+	            return;
+	        }
+
+	        for (int row = 0; row < chess.length; row++) {
+	            for (int col = 0; col < chess[0].length; col++) {
+	                if (chess[row][col] == 0) {
+	                    chess[row][col] = qpsf + 1;
+	                    queensPermutations(qpsf + 1, tq, chess);
+	                    chess[row][col] = 0;
+	                }
+	            }
+	        }
+	    }
+	    public static void main(String[] args) throws Exception {
+	      Scanner t = new Scanner(System.in);
+	      System.out.println("Enter the value");
+	        int n = t.nextInt();
+	     
+	        int[][] chess = new int[n][n];
+
+	        queensPermutations(0, n, chess);
+	    }
+	}
+
+
+42. FRIENDS PAIRING
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+	static int counter = 1;
+
+    public static void solution(int i, int n, boolean[] used, String asf) {
+        if (i > n) {
+            System.out.println(counter + "." + asf);
+            counter++;
+            return;
+        }
+
+        if (used[i]) {
+            solution(i + 1, n, used, asf);
+        } else {
+            used[i] = true;
+            solution(i + 1, n, used, asf + "(" + i + ") ");
+
+            for (int j = i + 1; j <= n; j++) {
+                if (used[j] == false) {
+                    used[j] = true;
+                    solution(i + 1, n, used, asf + "(" + i + "," + j + ") ");
+                    used[j] = false;
+                }
+            }
+
+            used[i] = false;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the value");
+        int n = sc.nextInt();
+        boolean[] used = new boolean[n + 1];
+        solution(1, n, used, "");
+    }
+}
+
+
+
+43. PERMUTATION OF A STRING
+
+// aabb a2b2
+class Solution {
+    public List<String> find_permutation(String S) {
+        List<String> res = new ArrayList<>();
+        Character[] spots = new Character[S.length()];
+        HashMap<Character, Integer> lastOccurence = new HashMap<>();
+        
+        for(char ch : S.toCharArray()){
+            lastOccurence.put(ch, -1);
+        }
+        
+        generate(0, S, spots, lastOccurence, res);
+        Collections.sort(res);
+        return res;
+    }
+    
+    public void generate(int cc, String str, Character[] spots, HashMap<Character, Integer> lastOccurence, List<String> ans){
+        StringBuilder sb = new StringBuilder();
+        if(cc == str.length()){
+            for(int i=0; i < spots.length; i++){
+                sb.append(spots[i]);
+            }
+            ans.add(sb.toString());
+            return;
+        }
+        
+        char ch = str.charAt(cc);
+        int lo = lastOccurence.get(ch);
+        
+        for(int i = lo + 1; i < spots.length; i++){
+            if(spots[i] == null){
+                spots[i] = ch;
+                lastOccurence.put(ch, i);
+                generate(cc + 1, str, spots, lastOccurence, ans);
+                spots[i] = null;
+                lastOccurence.put(ch, -1);
+            }
+        }
+    }
+}
+
+
+
+44. IS PERMUTATION
+
+Input: s1 = "ab", s2 = "eidbaooo"
+Output: true
+Explanation: s2 contains one permutation of s1 ("ba").
+
+class Solution {
+    public boolean isPermutation(int[] s1Arr, int[] s2Arr){
+        
+        for(int i=0; i < s1Arr.length; i++){
+            if(s1Arr[i] != s2Arr[i])
+                return false;
+        }
+        return true;
+    }
+    
+    public boolean checkInclusion(String s1, String s2) {
+        int s1Len = s1.length();
+        int s2Len = s2.length();
+        
+        if(s2 == null || s2.length() == 0 || s1Len > s2Len) return false;
+        
+        int[] s1Arr = new int[26];
+        int[] s2Arr = new int[26];
+         
+        for(int i=0; i< s1Len; i++){
+            s1Arr[s1.charAt(i) - 'a']++;
+            s2Arr[s2.charAt(i) - 'a']++;
+        }
+            
+            for(int i=0; i < s2Len - s1Len; i++){
+                if(isPermutation(s1Arr, s2Arr))
+                    return true;
+                
+                s2Arr[s2.charAt(i) - 'a']--;
+                s2Arr[s2.charAt(i + s1Len) - 'a']++;
+            }
+        
+        if(isPermutation(s1Arr, s2Arr))
+                    return true;
+            
+            
+        
+        return false;
+    }
+}
+
+
+
+45. PALINDROMIC PERMUTATION OF A STRING
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+	 public static void main(String[] args) {
+	        Scanner scn = new Scanner(System.in);
+	        System.out.println("Enter the value");
+	        String str = scn.nextLine();
+	        HashMap < Character, Integer > fmap = new HashMap < > ();
+	        for (int i = 0; i < str.length(); i++) {
+	            char ch = str.charAt(i);
+	           if(fmap.containsKey(ch)) {
+	        	   int of = fmap.get(ch);
+	        	   fmap.put(ch, of + 1);
+	           } else {
+	        	   fmap.put(ch, 1);
+	           }
+	        }
+	        
+	     
+	        Character odd = null;
+	        int odds = 0;
+	        int length = 0;
+	       
+	           for(char ch: fmap.keySet()) {
+	        	   int freq = fmap.get(ch);
+	        	   
+	        	   if(freq % 2 == 1) {
+	        		   odd = ch;
+	        		   odds++;
+	        	   }
+	        	   fmap.put(ch, freq/2);
+	        	   length += freq/2;
+	           }
+	           if(odds > 1) {
+	        	   System.out.println(-1);
+	        	   return;
+	           }
+	        generatepw(1, length, fmap, odd, "");
+	        
+
+	    }
+
+	    public static void generatepw(int cs, int ts, HashMap < Character, Integer > fmap, Character oddc, String asf) {
+	        if (cs > ts) {
+	        	String rev = "";
+	        	for(int i = asf.length() - 1; i >=0; i--) {
+	        		rev += asf.charAt(i);
+	        	}
+	        	String res = asf;
+	        	if(oddc != null) {
+	        		res += oddc;
+	        	}
+	        	res += rev;
+	            System.out.println(res);
+	            return;
+	        }
+
+	        for (char ch: fmap.keySet()) {
+	            if (fmap.get(ch) > 0) {
+	                fmap.put(ch, fmap.get(ch) - 1);
+	                generatepw(cs + 1, ts, fmap, oddc, asf + ch);
+	                fmap.put(ch, fmap.get(ch) + 1);
+	            }
+	        }
+	    }
+
+	  
+
+	}
+
+
+
+
+46. COIN CHANGE COMBINATION (WITHOUT DUPLICACY)
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+	 public static void coinChange(int i, int[] coins, int amtsf, int tamt, String asf) {
+	        if (i == coins.length) {
+	            if (amtsf == tamt) {
+	                System.out.println(asf + ".");
+	            }
+	            return;
+	        }
+	        coinChange(i + 1, coins, amtsf + coins[i], tamt, asf + coins[i] + "-");
+	        coinChange(i + 1, coins, amtsf + 0, tamt, asf + "");
+	    }
+	    public static void main(String[] args) throws Exception {
+	      Scanner t = new Scanner(System.in);
+	      System.out.println("Enter the value");
+	      int n = t.nextInt();
+	      int[] coins = new int[n];
+	      System.out.println("Enter the value");
+	        for (int i = 0; i < n; i++) {
+	            coins[i] = t.nextInt();
+	        }
+	        System.out.println("Enter the value");
+	        int amt =t.nextInt();
+	        coinChange(0, coins, 0, amt, "");
+	    }
+	}
+
+
+47. REMOVE INVALID PARENTHESIS
+
+class Solution {
+    HashSet<String> ret;
+    HashSet<String> visited;
+    public List<String> removeInvalidParentheses(String s) {
+        ret = new HashSet<>();
+        visited = new HashSet<>();
+        int minRemovements = findMinRemovements(s);
+        dfs(s, minRemovements);
+        return new ArrayList<>(ret);
+    }
+    
+    private void dfs(String s, int faultCnt) {
+        if (faultCnt == 0) {
+            if (findMinRemovements(s) == 0)
+                ret.add(s);
+            return;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            String newStr = s.substring(0, i) + s.substring(i + 1);
+            if (visited.contains(newStr)) continue;
+            else visited.add(newStr);
+            dfs(newStr, faultCnt - 1);
+        }
+    }
+    
+    private int findMinRemovements(String s) {
+        char[] chs = s.toCharArray();
+        int open = 0;
+        int ret = 0;
+        for (char ch:chs) {
+            if (ch == '(') open++;
+            else if (ch == ')') {
+                if (open == 0) ret++;
+                else open--;
+            }
+        }
+        return open + ret;
+    }
+}
+
+
+
+48. MIN ABSOLUTE SUM DIFF
+
+class Solution {
+    public int minAbsoluteSumDiff(int[] nums1, int[] nums2) {
+       int len = nums1.length, mod = 1_000_000_007;
+    int[] diff = new int[len];
+    long sum = 0, ans = 0;
+    
+    for(int i = 0 ; i < len ; i++){
+        diff[i] = Math.abs(nums1[i] - nums2[i]);
+        sum += diff[i];
+    }
+    
+    ans = sum;
+    Arrays.sort(nums1);
+    
+    for(int i = 0 ; i < len ; i++){
+        sum -= diff[i];            
+        int val = bestMatch(nums1, nums2[i]);
+        sum += val;
+        
+        if(sum < ans){
+            ans = sum;
+        }
+        sum -= val;
+        sum += diff[i];
+    }
+    
+    return (int) (ans % mod);
+}
+
+public int bestMatch(int[] nums, int target){
+    
+    int lo = 0, hi = nums.length - 1, small = -1, big = -1, ans = Integer.MAX_VALUE;
+    while(lo <= hi){
+        
+        int mid = lo + (hi - lo) / 2;
+        if(nums[mid] == target)
+            return 0;
+        else if(nums[mid] < target){
+            lo = mid + 1;
+            small = mid;
+        }
+        else{
+            hi = mid - 1;
+            big = mid;
+        }
+    }
+    
+    if(small != -1)
+        ans = Math.abs(target - nums[small]);
+    
+    if(big != -1)
+        ans = Math.min(ans, Math.abs(target - nums[big]));
+    
+    return ans;
+}
+}
+
+
+49. PRINT PERMUTATIONS
+
+package automate;                                                                                                                                                                              
+import java.io.*;                                                                                                                                                                              
+import java.util.*;                                                                                                                                                                            
+                                                                                                                                                                                               
+public class MyClass {                                                                                                                                                                         
+                                                                                                                                                                                               
+	public static void permutations(int[] boxes, int ci, int ti) {                                                                                                                             
+        if (ci > ti) {                                                                                                                                                                         
+            for (int i = 0; i < boxes.length; i++) {                                                                                                                                           
+                System.out.print(boxes[i]);                                                                                                                                                    
+            }                                                                                                                                                                                  
+            System.out.println();                                                                                                                                                              
+            return;                                                                                                                                                                            
+        }                                                                                                                                                                                      
+        for (int i = 0; i < boxes.length; i++) {                                                                                                                                               
+            if (boxes[i] == 0) {                                                                                                                                                               
+                boxes[i] = ci;                                                                                                                                                                 
+                permutations(boxes, ci + 1, ti);                                                                                                                                               
+                boxes[i] = 0;                                                                                                                                                                  
+            }                                                                                                                                                                                  
+        }                                                                                                                                                                                      
+    }                                                                                                                                                                                          
+                                                                                                                                                                                               
+    public static void main(String[] args) throws Exception {                                                                                                                                  
+		  Scanner t = new Scanner(System.in);                                                                                                                                                  
+		  System.out.println("Enter the value");                                                                                                                                               
+          int nboxes = t.nextInt();                                                                                                                                                            
+                                                                                                                                                                                               
+        int arr[] = new int[nboxes];                                                                                                                                                           
+        System.out.println("Enter the value");                                                                                                                                               
+        for (int i = 0; i < arr.length; i++) {                                                                                                                                               
+            arr[i] = t.nextInt();                                                                                                                                                            
+        }                                                                                                                                                                                    
+                                                                                                                                                                                               
+        System.out.println("Enter the value");                                                                                                                                                 
+        int ritems = t.nextInt();                                                                                                                                                              
+        permutations(arr, 1, ritems);                                                                                                                                                          
+    }                                                                                                                                                                                          
+                                                                                                                                                                                               
+} 
+
+50. PRINT COMBINATIONS
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+	 public static void combinations(int cb, int tb, int ssf, int ts, String asf) {
+	        if (cb > tb) {
+	            if (ssf == ts) {
+	                System.out.println(asf);
+	            }
+	            return;
+	        }
+
+	        combinations(cb + 1, tb, ssf + 1, ts, asf + "i");
+	        combinations(cb + 1, tb, ssf + 0, ts, asf + "-");
+	    }
+
+	    public static void main(String[] args) throws Exception {
+	    Scanner t = new Scanner(System.in);
+	    System.out.println("Enter the value");
+	        int nboxes = t.nextInt();
+	        int ritems = t.nextInt();
+	        combinations(1, nboxes, 0, ritems, "");
+	    }
+
+	}                                                                                                                                                                                             
+      
+
+51. PRINT PERMUTATIONS USING COMBINATION
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+    public static void permutations(int cb, int tb, int[] items, int ssf, int ts, String asf) {
+        if (cb > tb) {
+            if (ssf == ts) {
+                System.out.println(asf);
+            }
+            return;
+        }
+
+
+        for (int i = 0; i < items.length; i++) {
+            if (items[i] == 0) {    // to know if item got selected
+                items[i] = 1;
+                permutations(cb + 1, tb, items, ssf + 1, ts, asf + (i + 1));
+                items[i] = 0;
+            }
+        }
+        permutations(cb + 1, tb, items, ssf, ts, asf + 0);
+    }
+
+    public static void main(String[] args) throws Exception {
+    	 Scanner t = new Scanner(System.in);
+ 	    System.out.println("Enter the value");
+ 	        int nboxes = t.nextInt();
+ 	        int ritems = t.nextInt();
+        permutations(1, nboxes, new int[ritems], 0, ritems, "");
+    }
+
+}    
+           ts = r items  
+
+
+52. PRINT COMBINATION USING PERMUTATION   
+ 
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+	 public static void combinations(boolean[] boxes, int ci, int ti, int llb) {
+	        if (ci > ti) {
+	        for (int i = 0; i < boxes.length; i++) {
+	            if (boxes[i]) {
+	               System.out.print("i");
+	            } else {
+	            	 System.out.print("-");
+	            }
+	        }
+	        System.out.println();
+	        return;
+	    }
+	        
+	        for (int b = llb + 1; b < boxes.length; b++) {
+	            if (boxes[b] == false) {
+	                boxes[b] = true;
+	                combinations(boxes, ci + 1, ti, b);
+	                boxes[b] = false;
+	            }
+	        }
+	 }
+
+	    public static void main(String[] args) throws Exception {
+	    	 Scanner t = new Scanner(System.in);
+	  	    System.out.println("Enter the value");
+	  	        int nboxes = t.nextInt();
+	  	        int ritems = t.nextInt();
+	        combinations(new boolean[nboxes], 1, ritems, -1);
+	    }
+
+	}
+
+
+53. LARGEST NUMBER POSSIBLE AFTER KTH SWAP
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+	    static String lmax;
+	    public static void main(String[] args) {
+	        Scanner scn = new Scanner(System.in);
+	        System.out.println("Enter the value");
+	        String str = scn.next();
+	        System.out.println("Enter the value");
+	        int k = scn.nextInt();
+	        lmax = str;
+	        findMaximum(str, k);
+	        System.out.println(lmax);
+	    }
+	    
+
+
+	    public static void findMaximum(String str, int k) {
+	    	
+            if (Integer.parseInt(str) > Integer.parseInt(lmax)) {
+                lmax = str;
+            }
+            
+	        if (k == 0) {
+	            return;
+	        }
+
+	        for (int i = 0; i < str.length() - 1; i++) {
+	            for (int j = i + 1; j < str.length(); j++) {
+	                if (str.charAt(i) < str.charAt(j)) {
+	                    String swapped = swap(str, i, j);
+	                    findMaximum(swapped, k - 1);
+	                }
+	            }
+	        }
+	    }
+
+	    public static String swap(String str, int i, int j) {
+	        char ith = str.charAt(i);
+	        char jth = str.charAt(j);
+
+	        String left = str.substring(0, i);
+	        String middle = str.substring(i + 1, j);
+	        String right = str.substring(j + 1);
+
+	        return left + jth + middle + ith + right;
+	    }
+
+	}    
+
+
+54. PERMUTATION OF WORDS
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+	 public static void generateWords(int cs, int ts, HashMap<Character, Integer> fmap, String asf) {
+		    if(cs > ts){
+		      System.out.println(asf);
+		      return;
+		    }
+
+		    for (char ch : fmap.keySet()) {
+		      if (fmap.get(ch) > 0) {
+		        fmap.put(ch, fmap.get(ch) - 1);
+		        generateWords(cs + 1, ts, fmap, asf + ch);
+		        fmap.put(ch, fmap.get(ch) + 1);
+		      }
+		    }
+		  }
+
+		  public static void main(String[] args) throws Exception {
+		    Scanner br = new Scanner(System.in);
+		    System.out.println("Enter the value");
+		    String str = br.nextLine();
+
+		    HashMap<Character, Integer> fmap = new HashMap<>();
+		    for(char ch: str.toCharArray()){
+		      if(fmap.containsKey(ch)){
+		        fmap.put(ch, fmap.get(ch) + 1);
+		      } else {
+		        fmap.put(ch, 1);
+		      }
+		    }
+
+		    generateWords(1, str.length(), fmap, "");
+		  }
+
+		}    
+
+
+55. WORDS K SELECTION (WITHOUT REPETITION)
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+	 public static void generateSelection(int i, String ustr, int ssf, int ts, String asf) {
+		    if (i == ustr.length()) {
+		      if(ssf == ts){
+		        System.out.println(asf);
+		      }
+		      return;
+		    }
+
+		    char ch = ustr.charAt(i);
+		    generateSelection(i + 1, ustr, ssf + 1, ts, asf + ch);
+		    generateSelection(i + 1, ustr, ssf + 0, ts, asf + "");
+		  }
+
+		  public static void main(String[] args) throws Exception {
+			  Scanner br = new Scanner(System.in);
+			    System.out.println("Enter the value");
+		    String str = br.nextLine();
+		    System.out.println("Enter the value");
+		    int k = br.nextInt();
+
+		    HashSet<Character> unique = new HashSet<>();
+		    String ustr = "";
+		    for (char ch : str.toCharArray()) {
+		      if (unique.contains(ch) == false) {
+		        unique.add(ch);
+		        ustr += ch;
+		      }
+		    }
+
+		    generateSelection(0, ustr, 0, k, "");
+		  }
+
+		}
+
+
+56. K LENGTH WORD
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+	 public static void generateWords(int cc, String ustr, int ssf, int ts, Character[] spots) {
+		    if (cc == ustr.length()) {
+		      if(ssf == ts){
+		        for(int i = 0; i < spots.length; i++){
+		          System.out.print(spots[i]);
+		        }
+		        System.out.println();
+		      }
+		      return;
+		    }
+
+		    char ch = ustr.charAt(cc);
+		    for(int i = 0; i < spots.length; i++){
+		      if(spots[i] == null){
+		        spots[i] = ch;
+		        generateWords(cc + 1, ustr, ssf + 1, ts, spots);
+		        spots[i] = null;
+		      }
+		    }
+		    generateWords(cc + 1, ustr, ssf + 0, ts, spots);
+		  }
+
+		  public static void main(String[] args) throws Exception {
+			  Scanner br = new Scanner(System.in);
+			    System.out.println("Enter the value");
+		    String str = br.nextLine();
+		    System.out.println("Enter the value");
+		    int k = br.nextInt();
+		    
+		    HashSet<Character> unique = new HashSet<>();
+		    String ustr = "";
+		    for (char ch : str.toCharArray()) {
+		      if (unique.contains(ch) == false) {
+		        unique.add(ch);
+		        ustr += ch;
+		      }
+		    }
+
+		    Character[] spots = new Character[k];
+		    generateWords(0, ustr, 0, k, spots);
+		  }
+
+		}
+
+
+57. QUEEN COMBINATIONS
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+    public static void queensCombinations(int qpsf, int tq, boolean[][] chess, int lcno) {
+		 if (qpsf == tq) {
+	            for (int row = 0; row < chess.length; row++) {
+	                for (int col = 0; col < chess.length; col++) {
+	                    System.out.print(chess[row][col] ? "q\t" : "-\t");
+	                }
+	                System.out.println();
+	            }
+	            System.out.println();
+	            return;
+	        }
+
+	        for (int cell = lcno + 1; cell < chess.length * chess.length; cell++) {
+	            int row = cell / chess.length;
+	            int col = cell % chess.length;
+
+	            if (chess[row][col] == false) {
+	                chess[row][col] = true;
+	                queensCombinations(qpsf + 1, tq, chess, cell);
+	                chess[row][col] = false;
+	            }
+	        }
+	    }
+
+	    public static void main(String[] args) throws Exception {
+	    	 Scanner br = new Scanner(System.in);
+			    System.out.println("Enter the value");
+			    int n = br.nextInt();
+	        boolean[][] chess = new boolean[n][n];
+
+	        queensCombinations(0, n, chess, -1);
+	    }
+	}
+
+
+
+	                              
+
+58. TALLEST BILLIBOARD
+
+// l1 - l2 = diff
+// (l1 + x) - l2
+// (l1 - l2) + x
+// diff + x   ..add in left rod
+
+// l1 - l2 = diff
+// l1 - (l2 + x)
+// (l1 - l2) - x
+// diff - x   ..add in right rod
+
+// Input: rods = [1,2,3,6]
+// Output: 6
+// Explanation: We have two disjoint subsets {1,2,3} and {6}, which have the same sum = 6.
+
+class Solution {
+    public int longboard(int[] rods, int idx, int diff, int[][] dp)
+    {
+        
+         if(dp[idx][diff+5000] != -1)
+            return   dp[idx][diff+5000];
+        
+        if(idx>=rods.length)
+        {
+            if(diff==0)
+                return 0;
+            return Integer.MIN_VALUE;
+        }
+        //take into 1
+        int lb= rods[idx] + longboard(rods,idx+1,diff+rods[idx],dp);
+        //take into 2
+        int rb = rods[idx] + longboard(rods,idx+1,diff-rods[idx],dp);
+        //not take
+        int no = longboard(rods,idx+1,diff,dp);
+        return dp[idx][diff+5000] = Math.max(lb,Math.max(rb,no));
+    
+    }
+    public int tallestBillboard(int[] rods) {
+        
+        int [][]dp= new int[21][10001];
+        
+        for(int []t : dp)
+            Arrays.fill(t,-1);
+        
+        int ans=longboard(rods, 0,0,dp);
+        
+        return ans/2;
+    }
+}
+
+
+59. NQUEENS COMBINATIONS
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+	public static boolean IsQueenSafe(boolean[][] chess, int row, int col) {
+        // vertical
+        for (int i = row, j = col; i >= 0; i--) {
+            if(chess[i][j]){
+                return false;
+            }
+        }
+
+        // horizontal
+        for (int i = row, j = col; j >= 0; j--) {
+            if(chess[i][j]){
+                return false;
+            }
+        }
+
+        // diagonal
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+            if(chess[i][j]){
+                return false;
+            }
+        }
+
+        // anti-diagonal
+        for (int i = row, j = col; i >= 0 && j < chess.length; i--, j++) {
+            if(chess[i][j]){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static void nqueens(int qpsf, int tq, boolean[][] chess, int lcno) {
+        if (qpsf == tq) {
+            for (int row = 0; row < chess.length; row++) {
+                for (int col = 0; col < chess.length; col++) {
+                    System.out.print(chess[row][col] ? "q\t" : "-\t");
+                }
+                System.out.println();
+            }
+            System.out.println();
+            return;
+        }
+
+        for (int cell = lcno + 1; cell < chess.length * chess.length; cell++) {
+            int row = cell / chess.length;
+            int col = cell % chess.length;
+            
+            if (chess[row][col] == false && IsQueenSafe(chess, row, col)) {
+                chess[row][col] = true;
+                nqueens(qpsf + 1, tq, chess, cell);
+                chess[row][col] = false;
+            }
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+    	 Scanner br = new Scanner(System.in);
+		    System.out.println("Enter the value");
+		    int n = br.nextInt();
+        boolean[][] chess = new boolean[n][n];
+
+        nqueens(0, n, chess, -1);
+    }
+}
+
+
+60. NQUEENS PERMUTATIONS
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+	 public static boolean IsQueenSafe(int[][] chess, int row, int col) {
+	        // vertical
+	        for (int i = row, j = col; i >= 0; i--) {
+	            if(chess[i][j] > 0){
+	                return false;
+	            }
+	        }
+
+	        for (int i = row, j = col; i < chess.length; i++) {
+	            if(chess[i][j] > 0){
+	                return false;
+	            }
+	        }
+
+	        // horizontal
+	        for (int i = row, j = col; j >= 0; j--) {
+	            if(chess[i][j] > 0){
+	                return false;
+	            }
+	        }
+
+	        for (int i = row, j = col; j < chess.length; j++) {
+	            if(chess[i][j] > 0){
+	                return false;
+	            }
+	        }
+
+	        // diagonal
+	        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+	            if(chess[i][j] > 0){
+	                return false;
+	            }
+	        }
+
+	        for (int i = row, j = col; i < chess.length && j < chess.length; i++, j++) {
+	            if(chess[i][j] > 0){
+	                return false;
+	            }
+	        }
+
+	        // anti-diagonal
+	        for (int i = row, j = col; i >= 0 && j < chess.length; i--, j++) {
+	            if(chess[i][j] > 0){
+	                return false;
+	            }
+	        }
+
+	        for (int i = row, j = col; i < chess.length && j >= 0; i++, j--) {
+	            if(chess[i][j] > 0){
+	                return false;
+	            }
+	        }
+
+	        return true;
+	    }
+
+	    public static void nqueens(int qpsf, int tq, int[][] chess) {
+	        if (qpsf == tq) {
+	            for (int row = 0; row < chess.length; row++) {
+	                for (int col = 0; col < chess.length; col++) {
+	                	if(chess[row][col] == 0) {
+	                		  System.out.print( "-\t");
+	                	} else {
+	                		 System.out.print( "q"+ chess[row][col] + "\t");
+	                	}
+	                }
+	                System.out.println();
+	            }
+	            System.out.println();
+	            return;
+	        }
+
+	        for (int cell = 0; cell < chess.length * chess.length; cell++) {
+	            int row = cell / chess.length;
+	            int col = cell % chess.length;
+
+	            if (chess[row][col] == 0 && IsQueenSafe(chess, row, col)) {
+	                chess[row][col] = qpsf + 1;
+	                nqueens(qpsf + 1, tq, chess);
+	                chess[row][col] = 0;
+	            }
+	        }
+	    }
+
+	    public static void main(String[] args) throws Exception {
+	    	 Scanner br = new Scanner(System.in);
+			    System.out.println("Enter the value");
+			    int n = br.nextInt();
+	        int[][] chess = new int[n][n];
+
+	        nqueens(0, n, chess);
+	    }
+	}
+
+
+	                         
+61. KNIGHTS COMBINATIONS
+
+package automate;
+import java.io.*;
+import java.util.*;
+
+public class MyClass {
+
+
+	 public static boolean IsKnightSafe(boolean[][] chess, int i, int j) {
+	        if(i - 1 >= 0 && j - 2 >= 0 && chess[i - 1][j - 2]){
+	            return false;
+	        }
+
+	        if(i - 2 >= 0 && j - 1 >= 0 && chess[i - 2][j - 1]){
+	            return false;
+	        }
+
+	        if(i - 2 >= 0 && j + 1 < chess.length && chess[i - 2][j + 1]){
+	            return false;
+	        }
+
+	        if(i - 1 >= 0 && j + 2 < chess.length && chess[i - 1][j + 2]){
+	            return false;
+	        }
+
+	        return true;
+	    }
+
+	    public static void nknights(int kpsf, int tk, boolean[][] chess, int lcno) {
+	        if (kpsf == tk) {
+	            for (int row = 0; row < chess.length; row++) {
+	                for (int col = 0; col < chess.length; col++) {
+	                    System.out.print(chess[row][col] ? "k\t" : "-\t");
+	                }
+	                System.out.println();
+	            }
+	            System.out.println();
+	            return;
+	        }
+
+	        for (int cell = lcno + 1; cell < chess.length * chess.length; cell++) {
+	            int row = cell / chess.length;
+	            int col = cell % chess.length;
+	            
+	            if (chess[row][col] == false && IsKnightSafe(chess, row, col)) {
+	                chess[row][col] = true;
+	                nknights(kpsf + 1, tk, chess,cell);
+	                chess[row][col] = false;
+	            }
+	        }
+	    }
+
+	    public static void main(String[] args) throws Exception {
+	    	 Scanner br = new Scanner(System.in);
+			    System.out.println("Enter the value");
+			    int n = br.nextInt();
+	        boolean[][] chess = new boolean[n][n];
+
+	        nknights(0, n, chess, -1);
+	    }
+	}
+
+
+    
+  
+
+	                        	                         
+ 62. MAXIMUM NUMBER OF ACHIEVABLE TRANSFER REQUESTS
+
+class Solution {
+    
+    int result = Integer.MIN_VALUE;
+    int m;
+    
+    public int maximumRequests(int n, int[][] requests) {
+        m = requests.length;
+        
+        int[] resultant = new int[n];
+        
+        solve(0, 0, n, resultant, requests);
+        
+        return result;
+    }
+    
+    public void solve(int idx, int count, int n, int[] resultant, int[][] requests){
+        if(idx >= m){
+            boolean allZero = true;
+            
+            for(int val : resultant){
+                if(val != 0){
+                    allZero = false;
+                    break;
+                }
+            }
+            
+            if(allZero == true){
+                result = Math.max(result, count);
+            }
+            return;
+        }
+        
+        int from = requests[idx][0];
+        int to = requests[idx][1];
+        
+        resultant[from]--;
+        resultant[to]++;
+        
+        solve(idx+1, count+1, n, resultant, requests);
+        
+        resultant[from]++;
+        resultant[to]--;
+        
+         solve(idx+1, count, n, resultant, requests);
+    }
+}
+
+
+    
+   
+
+
+	                        	                                      
+
+
+	                                   
+
+
+	                                   	                                   
+		                        
+
+
+		                                                                                                                                                                                                   
+                                                                                                                                                                                               
